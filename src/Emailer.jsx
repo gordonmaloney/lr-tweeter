@@ -339,7 +339,7 @@ export const Emailer = ({
                     campaign?.target == "Edinburgh"
                       ? emailing.map((msp) => msp.email).join(",")
                       : campaign?.target
-                  }?subject=${subject}&body=${
+                  }?subject=${subject}&bcc=objectionapp@livingrent.org&body=${
                     body.replace("%", "%25").replace(/\n/g, "%0A") +
                     "%0A%0A" +
                     signOff.replace(/\n/g, "%0A")
@@ -370,7 +370,7 @@ export const Emailer = ({
                     campaign?.target == "Edinburgh"
                       ? emailing.map((msp) => msp.email).join(",")
                       : campaign?.target
-                  }&su=${subject}&body=${
+                  }&bcc=objectionapp@livingrent.org&su=${subject}&body=${
                     body.replace("%", "%25").replace(/\n/g, "%0A") +
                     "%0A%0A" +
                     signOff.replace(/\n/g, "%0A")

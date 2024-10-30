@@ -19,7 +19,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { ModalContent } from "./ModalContent";
 import { mobileStyle } from "./ModalContent";
-import { EDINBURGHCLLRS } from "./Data/EDINBURGHCLLRS";
 
 export const Tweetr = ({
   campaign,
@@ -44,6 +43,8 @@ export const Tweetr = ({
 
   const [targetCllrs, setTargetCllrs] = useState([]);
 
+  console.log(cllrs)
+
   let Parties = ['SNP', 'Labour', 'Tory', 'LibDem', 'Green']
 
   useEffect(() => {
@@ -53,13 +54,14 @@ export const Tweetr = ({
       setMspHandle(handles.filter((hand) => hand.name == msp.name)[0].handle);
 
 
-      (target == "Edinburgh") &&
+      (target == "Edinburgh" || target == "Glasgow" ) &&
       setMspHandle(targetCllrs.map((cllr) => cllr.twitter).join(", "));
 
     target &&
       !Parties.includes(target) &&
       target !== "msps" &&
       target !== "Edinburgh" &&
+      target !== "Glasgow" &&
       target !== "none" &&
       setMspHandle("@" + target);
   }, [msp, mspProp, constMSPs, targetCllrs]);
@@ -71,7 +73,7 @@ export const Tweetr = ({
   }, [mspHandle]);
 
   useEffect(() => {
-    if (target && target == "Edinburgh") {
+    if (target && (target == "Edinburgh" || target == "Glasgow")) {
       setTargetCllrs(cllrs.filter((cllr) => cllr.twitter !== "none"));
     }
   }, [target, cllrs, ward]);
@@ -112,7 +114,7 @@ export const Tweetr = ({
           </span>
         </>
       )}
-      {target == "Edinburgh" && (
+      {(target == "Edinburgh" || target == "Glasgow" ) && (
         <>
           <br />
           <br /> It looks like you live in <b>{ward}</b>. If that's wrong,{" "}
@@ -121,7 +123,11 @@ export const Tweetr = ({
           </span>
         </>
       )}
-      {mspHandle !== "none" ? (
+
+{console.log((target == "Glasgow" || target == "Edinburgh") && targetCllrs.length > 0)}
+
+      {(target == "msp" && mspHandle !== "none") || ((target == "Glasgow" || target == "Edinburgh") && targetCllrs.length > 0) ? (
+
         <>
           {target == "msps" || !target || Parties.includes(target) ? (
             <span>
@@ -134,11 +140,11 @@ export const Tweetr = ({
             </span>
           ) : target == "none" ? (
             <></>
-          ) : target == "Edinburgh" ? (
+          ) : (target == "Edinburgh" || target == "Glasgow" )? (
             <>
               <br />
               <br />
-              You're tweeing{" "}
+              You're tweeting{" "}
               {targetCllrs.map((cllr, idx) => (
                 <>
                   <b>
@@ -207,11 +213,8 @@ export const Tweetr = ({
           >
             {tweetBody.length + hashtag.length + 2}/280
           </div>
-        </>
-      ) : (
-        <>It looks like this MSP isn't on Twitter.</>
-      )}
-      <br />
+
+          <br />
       <br />
       <center>
         <Button
@@ -229,6 +232,11 @@ export const Tweetr = ({
           Send Tweet
         </Button>
       </center>
+        </>
+      ) : (
+        <><br/><br/>It looks like we do not have data for any of your representatives on Twitter - sorry!</>
+      )}
+
       <br />
       <br />
       {(!target || target == "msps") && (

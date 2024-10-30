@@ -55,6 +55,9 @@ export const Emailer = ({
   };
   let Parties = ["SNP", "Labour", "Tory", "LibDem", "Green"];
 
+
+  console.log(campaign)
+  
   useEffect(() => {
     if (campaign) {
       setSubject(campaign.subject);
@@ -68,11 +71,13 @@ export const Emailer = ({
   }, [constMSPs]);
 
   useEffect(() => {
-    target !== "Edinburgh" && setEmailing(constMSPs);
+    target !== "Edinburgh" && target !== "Glasgow" 
+    && setEmailing(constMSPs);
   }, [constMSPs]);
 
   useEffect(() => {
-    target == "Edinburgh" && setEmailing(cllrs);
+    (target == "Edinburgh" || target == "Glasgow")
+    && setEmailing(cllrs);
   }, [target, ward, cllrs]);
 
   console.log(emailing);
@@ -150,12 +155,14 @@ export const Emailer = ({
             ))}
             {campaign?.target !== "msps" &&
               campaign?.target !== "Edinburgh" &&
+              campaign?.target !== "Glasgow" &&
               !Parties.includes(target) && (
                 <span style={{ marginLeft: "10px" }}>{campaign?.target}</span>
               )}
             {(campaign?.target == "msps" ||
               Parties.includes(target) ||
-              campaign?.target == "Edinburgh") &&
+              campaign?.target == "Edinburgh" ||
+              campaign?.target == "Glasgow") &&
               emailing.length == 0 && (
                 <div style={{ color: "red", marginLeft: "10px" }}>
                   You need to pick at least one recipient!
@@ -192,7 +199,7 @@ export const Emailer = ({
                         color: "black",
                       }}
                     >
-                      {target == "Edinburgh" ? "Councillors " : "MSPs "}you
+                      {(target == "Edinburgh" || target == "Glasgow" ) ? "Councillors " : "MSPs "}you
                       aren't emailing:
                     </div>
                   </AccordionSummary>
@@ -207,7 +214,7 @@ export const Emailer = ({
                   >
                     <div style={{ marginLeft: "5px" }}>
                       These are the{" "}
-                      {target == "Edinburgh" ? "councillors " : "MSPs "} not
+                      {(target == "Edinburgh" || target == "Glasgow" )  ? "councillors " : "MSPs "} not
                       included in your email. If you'd like to include them,
                       just tap their name.
                     </div>
@@ -295,8 +302,7 @@ export const Emailer = ({
               fontSize: "small",
             }}
           >
-            Make sure you include your address so they know you're an Edinburgh
-            resident!
+            Make sure you include your address so they know you're {(target == "Edinburgh" ? "an Edinburgh" : target == "Glasgow" ? "a Glasgow" : "a" )} resident!
           </p>
           <FormLabel sx={{ marginLeft: "2.5%", color: "white" }}>
             Your email address:
@@ -336,7 +342,8 @@ export const Emailer = ({
                   href={`mailto:${
                     !campaign?.target ||
                     campaign?.target == "msps" ||
-                    campaign?.target == "Edinburgh"
+                    campaign?.target == "Edinburgh" ||
+                    campaign?.target == "Glasgow"
                       ? emailing.map((msp) => msp.email).join(",")
                       : campaign?.target
                   }?subject=${subject}&bcc=objectionapp@livingrent.org&body=${
@@ -367,7 +374,8 @@ export const Emailer = ({
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${
                     !campaign?.target ||
                     campaign?.target == "msps" ||
-                    campaign?.target == "Edinburgh"
+                    campaign?.target == "Edinburgh" ||
+                    campaign?.target == "Glasgow"
                       ? emailing.map((msp) => msp.email).join(",")
                       : campaign?.target
                   }&bcc=objectionapp@livingrent.org&su=${subject}&body=${

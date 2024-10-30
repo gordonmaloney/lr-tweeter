@@ -242,6 +242,7 @@ export const CreateTweet = () => {
           <MenuItem value="party">MSPs by party</MenuItem>
           <MenuItem value="custom">Custom</MenuItem>
           <MenuItem value="Edinburgh">Edinburgh City Council</MenuItem>
+          <MenuItem value="Glasgow">Glasgow City Council</MenuItem>
           <MenuItem value="none">None</MenuItem>
         </Select>
 

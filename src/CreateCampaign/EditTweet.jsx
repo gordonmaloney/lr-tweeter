@@ -236,6 +236,7 @@ import {
             <MenuItem value="msps">MSPs</MenuItem>
             <MenuItem value="custom">Custom</MenuItem>
             <MenuItem value="Edinburgh">Edinburgh City Council</MenuItem>
+            <MenuItem value="Glasgow">Glasgow City Council</MenuItem>
             <MenuItem value="none">None</MenuItem>
           </Select>
   

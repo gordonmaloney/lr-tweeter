@@ -11,6 +11,7 @@ import { BtnStyle, BtnStyleSmall } from "./Shared";
 import { useParams } from "react-router-dom";
 
 import { EDINBURGHCLLRS } from "./Data/EDINBURGHCLLRS";
+import { GLASGOWCLLRS } from "./Data/GLASGOWCLLRS"
 
 export const PostCode = ({ campaign }) => {
   const params = useParams();
@@ -38,6 +39,8 @@ export const PostCode = ({ campaign }) => {
 
   const [invalid, setInvalid] = useState(false);
 
+
+  console.log(target)
   const fetchPostcodeDeets = async () => {
     try {
       const response = await fetch(
@@ -52,6 +55,14 @@ export const PostCode = ({ campaign }) => {
       const wardData = await wardResponse.json();
       if (target == "Edinburgh") {
         wardData.result.admin_district == "City of Edinburgh"
+          ? setWard(wardData.result.admin_ward)
+          : setInvalid(true);
+      }
+      if (target == "Glasgow") {
+
+        console.log("test", wardData.result)
+
+        wardData.result.admin_district == "Glasgow City"
           ? setWard(wardData.result.admin_ward)
           : setInvalid(true);
       }
@@ -76,8 +87,18 @@ export const PostCode = ({ campaign }) => {
 
   useEffect(() => {
     if (ward) {
-      setCllrs(EDINBURGHCLLRS.filter((cllr) => cllr.ward == ward));
+
+      if (EDINBURGHCLLRS.filter((cllr) => cllr.ward == ward).length > 0) {
+        setCllrs(EDINBURGHCLLRS.filter((cllr) => cllr.ward == ward));
+      }
+
+      if (GLASGOWCLLRS.filter((cllr) => cllr.ward == ward).length > 0) {
+        setCllrs(GLASGOWCLLRS.filter((cllr) => cllr.ward == ward));
+      }
+
     }
+
+
   }, [ward]);
 
   let Parties = ["SNP", "Labour", "Tory", "LibDem", "Green"];
@@ -117,16 +138,17 @@ export const PostCode = ({ campaign }) => {
           (!target ||
             target == "msps" ||
             target == "Edinburgh" ||
+            target == "Glasgow" ||
             Parties.includes(target))) ? (
           <>
             <div className="landingContainerSmall">
               <span className="bebas header header2">
                 {channel == "email"
                   ? `Email your ${
-                      target !== "Edinburgh" ? "MSP" : "Councillor"
+                      (target !== "Edinburgh" && target !== "Glasgow") ? "MSP" : "Councillor"
                     }`
                   : `Tweet your ${
-                      target !== "Edinburgh" ? "MSP" : "Councillor"
+                    (target !== "Edinburgh" &&  target !== "Glasgow") ? "MSP" : "Councillor"
                     }`}
               </span>
               <br />
